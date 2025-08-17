@@ -5,13 +5,19 @@ import Login from './pages/Login'
 import Feed from './pages/Feed'
 import Discover from './pages/Discover'
 import Connections from './pages/Connections'
+import { useUser } from '@clerk/clerk-react'
+import Dashboard from './pages/Dashboard'
 
 function App() {
+  const {user} = useUser();
+
+
   
   return (
     <>
     <Routes>
-      <Route path="/login" element={<Login/>}/>
+      <Route path='/' element={<Dashboard/>}></Route>
+      <Route path="/login" element={user ? <Dashboard/> :<Login/>}/>
       <Route path='/feed' element ={<Feed/>}/>
       <Route path="/discover" element={<Discover/>}/>
       <Route path='/feed' element ={<Feed/>}/>
