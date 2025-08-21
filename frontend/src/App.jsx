@@ -7,6 +7,7 @@ import Discover from './pages/Discover'
 import Connections from './pages/Connections'
 import { useUser } from '@clerk/clerk-react'
 import Dashboard from './pages/Dashboard'
+import Layout from './pages/Layout'
 
 function App() {
   const {user} = useUser();
@@ -16,7 +17,7 @@ function App() {
   return (
     <>
     <Routes>
-      <Route path='/' element={<Dashboard/>}></Route>
+      <Route path='/' element={<Layout/>}></Route>
       <Route path="/login" element={user ? <Dashboard/> :<Login/>}/>
       <Route path='/feed' element ={<Feed/>}/>
       <Route path="/discover" element={<Discover/>}/>
