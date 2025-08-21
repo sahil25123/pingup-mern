@@ -3,6 +3,7 @@ import React , {useState} from 'react'
 import { Outlet } from 'react-router-dom'
 import {X  , Menu} from "lucide-react"
 import Loading from '../components/Loading';
+import Feed from './Feed';
 
 
 function Layout() {
@@ -24,7 +25,9 @@ function Layout() {
         : 
         <Menu className='absolute top-3 right-3 p-2 z-100 bg-white rounded-md shadow w-10 h-10 text-gray-600 sm:hidden' onClick={()=>setSidebarOpen(true)}/>
       }
+      <Feed/>
     </div>
+
       
   ) : (
     <Loading/>
