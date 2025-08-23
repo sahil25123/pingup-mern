@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Sparkle, TextIcon, Upload } from 'lucide-react'
 import React, { useState } from 'react'
 
 const StoryModal = ({setShowModel , fetchStories}) => {
@@ -72,10 +72,23 @@ const StoryModal = ({setShowModel , fetchStories}) => {
             </div>
             <div className='flex gap-2 mt-4'>
                 {bgColors.map((color)=>(
-                    <button key={color}  className='size-4 rounded-full ring cursor-pointer' style={{backgroundColor: color}} onClick={()=>{ setBg(color)}}></button>
+                    <button key={color}  className='size-4 rounded-full ring cursor-pointer scroll-auto' style={{backgroundColor: color}} onClick={()=>{ setBg(color)}}></button>
 
                 )) }
             </div>
+            <div className='flex gap-2 mt-4'>
+                <button onClick={()=>{ setMode('text'); setMedia(null); setPreiview_url(null); }} className={`flex-1 flex font-semibold items-center justify-center gap-2 p-2 cursor-pointer rounded ${mode === 'text' ? "bg-white text-black" : "bg-zinc-800"}`}>
+                    <TextIcon size={18}/> Text
+                </button>
+                <label className={`flex-1 flex items-center justify-center gap-2 p-2 rounded cursor-pointer ${mode === 'media' ? "bg-white text-black" : "bg-zinc-800"}`}>
+                    <input onChange={handleMediaUpload} type="file" accept='image/*, video/*' className='hidden' />
+                    <Upload size={18}/> Photo/Video
+                </label>
+                </div>
+
+                <button  className='flex items-center justify-center gap-2 text-white py-3 mt-4 w-full rounded bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 active:scale-95 transition cursor-pointer'>
+                <Sparkle size={18}/> Create Story
+            </button>
         </div>
 
 
