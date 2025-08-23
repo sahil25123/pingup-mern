@@ -73,7 +73,7 @@ const StoryModal = ({setShowModel , fetchStories}) => {
             </div>
             <div className='flex gap-2 mt-4'>
                 {bgColors.map((color)=>(
-                    <button key={color}  className='size-4 rounded-full ring cursor-pointer scroll-auto' style={{backgroundColor: color}} onClick={()=>{ setBg(color)}}></button>
+                    <button key={color}  className=' size-4 rounded-full ring cursor-pointer scroll-auto' style={{backgroundColor: color}} onClick={()=>{ setBg(color)}}></button>
 
                 )) }
             </div>
