@@ -8,6 +8,7 @@ import Connections from "./pages/Connections";
 import { useUser } from "@clerk/clerk-react";
 import Layout from "./pages/Layout";
 import { Toaster } from "react-hot-toast";
+import Profile from "./pages/Profile";
 
 function App() {
   const { user } = useUser();
@@ -22,8 +23,7 @@ function App() {
           {/* <Route path='messages/:userId' element={<ChatBox />}/> */}
           <Route path='connections' element={<Connections />}/>
           <Route path='discover' element={<Discover />}/>
-          {/* <Route path='profile' element={<Profile />}/> */}
-          {/* <Route path='profile/:profileId' element={<Profile />}/> */}
+          <Route path='profile' element={<Profile />}/>
           {/* <Route path='create-post' element={<CreatePost />}/> */}
         </Route>
       
