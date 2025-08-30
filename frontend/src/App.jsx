@@ -10,6 +10,7 @@ import Layout from "./pages/Layout";
 import { Toaster } from "react-hot-toast";
 import Profile from "./pages/Profile";
 import CreatePost from "./pages/CreatePost";
+import ChatBox from "./pages/ChatBox";
 
 function App() {
   const { user } = useUser();
@@ -21,7 +22,7 @@ function App() {
         <Route path='/' element={!user ? <Login /> : <Layout />}>
           <Route index element={<Feed />}/>
           <Route path='messages' element={<Messages />}/>
-          {/* <Route path='messages/:userId' element={<ChatBox />}/> */}
+          <Route path='messages/:userId' element={<ChatBox />}/>
           <Route path='connections' element={<Connections />}/>
           <Route path='discover' element={<Discover />}/>
           <Route path='profile' element={<Profile />}/>
