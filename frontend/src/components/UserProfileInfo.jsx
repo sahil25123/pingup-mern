@@ -6,7 +6,7 @@ function UserProfileInfo({user , posts , profileId , setShowEdit}) {
   return (
     <div className='relative py-2 px-6 md:px-8 bg-white'>
         <div className='flex flex-col md:flex-row items-start gap-6'>
-            <div className='size-32 border-4 border-white shadow-lg absolute -top-16 rounded-full'>
+            <div className='size-32 border-4 border-white shadow-lg absolute top-16 rounded-full'>
                 <img src={user.profile_picture} className='aspect-square object-cover absolute rounded-full z-2' alt="" />
             </div>
 
@@ -22,7 +22,8 @@ function UserProfileInfo({user , posts , profileId , setShowEdit}) {
                     </div>
                     {/* If user is not others profile that means he is opening his profile so we will give edit button */}
                     { !profileId && 
-                        <button onClick={()=>setShowEdit(true)} className='flex items-center gap-2 border cursor-pointer border-gray-300 hover:bg-gray-50 px-4 py-2 font-medium transition-colors mt-4 md:mt-0'>
+                        <button onClick={()=>{setShowEdit(true)
+                         console.log("button was clicked")}} className='flex items-center gap-2 border cursor-pointer border-gray-300 hover:bg-gray-50 px-4 py-2 font-medium transition-colors mt-4 md:mt-0'>
                             <PenBox className='size-4'/>
                             Edit
                         </button>
