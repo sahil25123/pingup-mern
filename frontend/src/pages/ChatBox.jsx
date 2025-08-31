@@ -1,13 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { dummyMessagesData, dummyUserData } from '../assets/assets'
-import { ImageIcon, SendHorizonal } from 'lucide-react'
 
 function ChatBox() {
 
     const messages = dummyMessagesData
     const [text , setText] = useState("")
     const [image , setImage] = useState(null)
-    
     const [user , setUser]  = useState(dummyUserData);
 
     const msgEndRef = useRef(null);
@@ -16,9 +14,9 @@ function ChatBox() {
         msgEndRef.current?.scrollIntoView({behavior :"smooth"})
     } , [messages])
 
+   const  sendMessage=()=>{
 
-
-
+    }   
 
   return (
     <div className='flex flex-col h-screen'>
@@ -63,7 +61,7 @@ function ChatBox() {
             <input type="file" id='image' accept='image/*' hidden onChange={(e)=>setImage(e.target.files[0])} />
           </label>
 
-          <button  className='bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 active:scale-95 cursor-pointer text-white p-2 rounded-full transition-all duration-300'>
+          <button onClick={sendMessage} className='bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 active:scale-95 cursor-pointer text-white p-2 rounded-full transition-all duration-300'>
             <SendHorizonal size={18}/>
           </button>
         </div>

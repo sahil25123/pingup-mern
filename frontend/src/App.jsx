@@ -27,6 +27,7 @@ function App() {
           <Route path='discover' element={<Discover />}/>
           <Route path='profile' element={<Profile />}/>
           <Route path='create-post' element={<CreatePost />}/>
+          {/* <Route path="" */}
         </Route>
       
       </Routes>
