@@ -1,12 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import connect from "./config/db.js";
 
 dotenv.config()
 
 const PORT=9000;
 
 const app= express();
+
+await connect(); //Database Connection config
 
 app.use(express.json());
 app.use(cors());
@@ -17,7 +20,7 @@ app.get("/" , (req, res)=>{
 
 app.listen(PORT , ()=>{
 
-    console.log("ruuning on port " , PORT)
+    console.log(`Server Running on the Port ${PORT}`)
 })
 
 
