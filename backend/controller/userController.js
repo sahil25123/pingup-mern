@@ -1,5 +1,5 @@
-import imagekit from "../config/imagekit";
-import User from "../models/user";
+import imagekit from "../config/imagekit.js";
+import User from "../models/user.js";
 import fs from "fs";
 
 
@@ -92,6 +92,61 @@ export const updateUserData = async (req, res) =>{
         const user = await User.findByIdAndUpdate(userId , updatedData , {new : true})
         res.json({ success: true, user, message: 'Profile updated successfully' });
     }
+
+    catch(e){
+        console.log(e)
+        res.json({success: false , message : e.message})
+    }
+}
+
+// Find users using username, email, location, name
+export const discoverUsers = async (req, res) => {
+    try {
+        const { userId } = req.auth();
+        const { input } = req.body;
+
+        const allUsers = await User.find(
+            {
+                $or: [
+                    {username: new RegExp(input, 'i')},
+                    {email: new RegExp(input, 'i')},
+                    {full_name: new RegExp(input, 'i')},
+                    {location: new RegExp(input, 'i')},
+                ]
+            }
+        );
+
+        const filteredUsers = allUsers.filter(user => user._id !== userId);
+
+        res.json({ success: true, users: filteredUsers });
+    } 
+    catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+}
+
+//Follow User 
+
+export const followUser = async (req, res) =>{
+    try{
+        const {userId} = await req.auth();
+        const {id} =req.body;
+
+        const user = await findById(userId);
+
+        if(user.following.includes(id)){
+            return res.json({ success: false, message: 'You are already following this user' });
+        }
+         user.following.push(id);
+        await user.save();
+
+        const toUser = await User.findById(id);
+        toUser.followers.push(userId);
+        await toUser.save();
+
+        res.json({ success: true, message: 'Now you are following this user' });
+     }
 
     catch(e){
         console.log(e)
