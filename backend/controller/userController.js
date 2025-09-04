@@ -28,7 +28,7 @@ export const updateUserData = async (req, res) =>{
     try{
         const {userId} = await req.auth();
 
-        const {username , bio , location , full_name } = req.body
+        let {username , bio , location , full_name } = req.body
 
 
         const tempUser  = await User.findById(userId);
@@ -130,7 +130,7 @@ export const discoverUsers = async (req, res) => {
 
 export const followUser = async (req, res) =>{
     try{
-        const {userId} = await req.auth();
+        const {userId} = await req.auth();// logggesd in usrer daata
         const {id} =req.body;
 
         const user = await findById(userId);
@@ -146,6 +146,34 @@ export const followUser = async (req, res) =>{
         await toUser.save();
 
         res.json({ success: true, message: 'Now you are following this user' });
+     }
+
+    catch(e){
+        console.log(e)
+        res.json({success: false , message : e.message})
+    }
+}
+
+
+//Unfollow User
+
+export const UnfollowUser = async (req, res) =>{
+    try{
+        const {userId} = await req.auth();// logggesd in usrer daata
+        const {id} =req.body;
+
+        const user = await findById(userId);
+
+        user.following = user.following.filter(user => user!==id)
+        await user.save();
+
+
+        const toUser = await findById(id)
+        toUser.followers = toUser.followers.filter(user =>user!== userId)
+
+        await toUser.save();
+
+        res.json({success:true , message : "You have unfollow the user"})
      }
 
     catch(e){
