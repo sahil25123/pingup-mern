@@ -34,7 +34,7 @@ export const updateUserData = async (req, res) =>{
         const tempUser  = await User.findById(userId);
 
         if(tempUser.username !== username){
-            const user = User.findOne({username})
+            const user = await User.findOne({username})
         
             !username && (username =tempUser.username)
 
@@ -180,4 +180,18 @@ export const UnfollowUser = async (req, res) =>{
         console.log(e)
         res.json({success: false , message : e.message})
     }
+}
+
+
+//Send Connection Request
+
+export const sendConnectionRequest = async(req , res) =>{
+    try{
+
+    }
+    catch(e){
+        console.log("Error in the Send Connection Request")
+        res.status(401).json({success : false , message : e.message})
+    }
+
 }
