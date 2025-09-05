@@ -1,4 +1,5 @@
 import imagekit from "../config/imagekit.js";
+import Connection from "../models/connection.js";
 import User from "../models/user.js";
 import fs from "fs";
 
@@ -187,6 +188,27 @@ export const UnfollowUser = async (req, res) =>{
 
 export const sendConnectionRequest = async(req , res) =>{
     try{
+
+        const {userId} = req.auth();
+
+        const {id} = req.body;
+
+
+        const last24hours =  new Date(Date.now() - 24*60*60*1000)
+
+        const connectionReq24 = await Connection.find({from_user_id : userId ,
+            createdAt : {$gt :last24hours} // check if sended connection req is from last 24 hours
+        })
+
+        if(connectionReq24.length >20){
+            res.json({success : false , message : "You have send more than 20 connections req in last 24  hours"})
+        }
+
+        const connection = await Connection.findOne({
+            
+        })
+
+
 
     }
     catch(e){
