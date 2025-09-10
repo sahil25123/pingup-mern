@@ -1,4 +1,4 @@
-import { discoverUsers, followUser, getUserData, UnfollowUser, updateUserData } from "../controller/userController.js";
+import { acceptConnectionRequest, discoverUsers, followUser, getUserConnections, getUserData, sendConnectionRequest, UnfollowUser, updateUserData } from "../controller/userController.js";
 import express from "express";
 import { protect } from "../middleware/auth.js";
 import { upload } from "../config/multer.js";
@@ -13,5 +13,11 @@ userRouter.post("/discover" , protect, discoverUsers)
 userRouter.post("/follow" , protect , followUser)
 
 userRouter.post("/unfollow" , protect , UnfollowUser)
+
+userRouter.post("/connect" , protect , sendConnectionRequest)
+
+userRouter.post("/accept" , protect , acceptConnectionRequest)
+
+userRouter.get("/connections" , protect , getUserConnections)
 
 export default userRouter;
