@@ -1,5 +1,6 @@
 import imagekit from "../config/imagekit.js";
 import Connection from "../models/connection.js";
+import Post from "../models/Post.js";
 import User from "../models/user.js";
 import fs from "fs";
 
@@ -304,3 +305,4 @@ export const getUserProfiles = async (req, res) => {
         res.json({ success: false, message: error.message });
     }
 }
+

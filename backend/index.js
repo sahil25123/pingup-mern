@@ -6,6 +6,7 @@ import { serve } from "inngest/express";
 import { inngest, functions } from "./inngest/index.js"
 import {clerkMiddleware} from "@clerk/express";
 import userRouter from "./routes/UserRoutes.js";
+import postRouter from "./routes/PostRoutes.js";
 
 
 dotenv.config()
@@ -21,7 +22,8 @@ app.use(cors());
 app.use(clerkMiddleware());
 
 
-app.use("/api",userRouter)
+app.use("/api/user",userRouter)
+app.use("/api/post" , postRouter);
 
 app.get("/" , (req, res)=>{
     res.send("Server is running")
