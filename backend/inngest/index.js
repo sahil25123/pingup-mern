@@ -135,10 +135,44 @@ const deleteStory = inngest.createFunction(
     }
 )
 
+const sendNotificationOfUnseenMessages = inngest.createFunction(
+    {id: "send-unseen-messages-notification"},
+    {cron: "TZ=America/New_York 0 9 * * *"}, // Every day 9 AM
+    async ({step}) => {
+        const message = await Message.find({seen: false}).populate('to_user_id');
+        const unseenCount = {};
+
+        message.map(message => {
+            unseenCount[message.to_user_id._id] = (unseenCount[message.to_user_id._id] || 0) + 1;
+        })
+
+        for(const userId in Object){
+            const user = await User.findById(userId);
+
+            const subject = `You have ${unseenCount[userId]} unseen messages`;
+
+            const body = `<div style="font-family: Arial, sans-serif; padding: 20px;">
+                            <h2>Hi ${user.full_name},</h2>
+                            <p>You have ${unseenCount[userId]} unseen messages</p>
+                            <p>Click <a href={"${process.env.FRONTEND_URL}/messages"} style="color: #10b981;">here</a> to view them</p>
+                            <br />
+                            <p>Thanks,<br />PingUp - Stay Connected</p>
+                        </div>`;
+
+            await sendEmail({
+                to: user.email,
+                subject,
+                body
+            })
+        }
+        return { message: "Notification sent."}
+    }
+)
+
 
 // Create an empty array where we'll export future Inngest functions
 export const functions = [  sendNewConnectionReq , deleteStory,
-    syncUserCreation , updateClerkUser , deleteclerkUser
+    syncUserCreation , updateClerkUser , deleteclerkUser , sendNotificationOfUnseenMessages
 ];
 
 
