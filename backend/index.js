@@ -8,6 +8,7 @@ import {clerkMiddleware} from "@clerk/express";
 import userRouter from "./routes/UserRoutes.js";
 import postRouter from "./routes/PostRoutes.js";
 import StoryRouter from "./routes/StoryRoutes.js";
+import messageRouter from "./routes/MessageRoutes.js";
 
 
 dotenv.config()
@@ -26,6 +27,7 @@ app.use(clerkMiddleware());
 app.use("/api/user",userRouter)
 app.use("/api/post" , postRouter);
 app.use("/api/story"  , StoryRouter)
+app.use("/api/message" , messageRouter)
 
 app.get("/" , (req, res)=>{
     res.send("Server is running")
