@@ -215,9 +215,14 @@ export const sendConnectionRequest = async(req , res) =>{
             
         })
         if(!connection){
-            await Connection.create({
+             const newConnection = await Connection.create({
                 from_user_id : userId,
                 to_user_id :id
+            })
+
+              await inngest.send({
+                name: 'app/conection-request',
+                data: { connectionId: newConnection._id }
             })
             return res.json({success : true , message :"Connection Request Sent"})
         }
@@ -226,6 +231,8 @@ export const sendConnectionRequest = async(req , res) =>{
             return res.json({success : true , message :"You are already Connected "})
 
         }
+
+
         return res.json({success : true , message :"Connection Request Pending"})
 
     }

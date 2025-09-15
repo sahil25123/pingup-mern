@@ -2,6 +2,8 @@ import fs from "fs";
 import imagekit from "../config/imagekit";
 import Story from "../models/Story";
 import { User } from "@clerk/express";
+import { inngest } from "../inngest";
+import { send } from "process";
 
 
 //Add user Story 
@@ -17,7 +19,7 @@ export const addUserStory = async (req, res) =>{
          
         //Upload media to imagekit
 
-        if(media_type == "image" || media_type =="video"){
+        if(media_type === "image" || media_type ==="video"){
             const fileBuffer = fs.readFileSync(media.path);
             const response = await imagekit.upload({
                 file: fileBuffer, 
@@ -35,6 +37,12 @@ export const addUserStory = async (req, res) =>{
                 background_colour , 
 
             })
+
+           // schedule story deletion after 24 hours
+        await inngest.send({
+            name: 'app/story.delete',
+            data: { storyId: story._id }
+        })
 
             res.json({success: true , story })
         }
