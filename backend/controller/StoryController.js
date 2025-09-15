@@ -1,9 +1,8 @@
 import fs from "fs";
-import imagekit from "../config/imagekit";
-import Story from "../models/Story";
-import { User } from "@clerk/express";
-import { inngest } from "../inngest";
-import { send } from "process";
+import imagekit from "../config/imagekit.js";
+import Story from "../models/Story.js";
+import User from "../models/user.js";
+import { inngest } from "../inngest/index.js";
 
 
 //Add user Story 

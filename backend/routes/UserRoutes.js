@@ -4,7 +4,6 @@ import {
   followUser,
   getUserConnections,
   getUserData,
-  getUserProfile,
   getUserProfiles,
   sendConnectionRequest,
   UnfollowUser,
