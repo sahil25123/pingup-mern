@@ -4,13 +4,15 @@ import { Outlet } from 'react-router-dom'
 import {X  , Menu} from "lucide-react"
 import Loading from '../components/Loading';
 import Feed from './Feed';
+import { useSelector } from 'react-redux';
 
 
 function Layout() {
 
 
     const [sidebarOpen , setSidebarOpen] = useState(false);
-    const user  = true;
+    const user  = true
+    console.log(user)
 
 
   return  user ? (

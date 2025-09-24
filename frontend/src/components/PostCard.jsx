@@ -1,11 +1,12 @@
 import { BadgeCheck, Heart, MessageCircle, MessagesSquareIcon, Share2 } from 'lucide-react'
 import React, { useState  } from 'react'
 import moment from 'moment'
+import { useSelector } from 'react-redux';
 
 function PostCard({post}) {
     const postWithHashtags = post.content.replace(/(#\w+)/g, '<span class="text-indigo-600">$1</span>');
     const [likes, setLikes] = useState(post.likes_count);
-    
+    const currentUser = useSelector((state)=>state.user.value)
 
   return (
     <div className='bg-white rounded-xl shadow p-4 space-y-4 w-full max-w-2xl'>
