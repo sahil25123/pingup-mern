@@ -12,22 +12,30 @@ import Profile from "./pages/Profile";
 import CreatePost from "./pages/CreatePost";
 import ChatBox from "./pages/ChatBox";
 import { useEffect } from "react";
+import {useDispatch} from "react-redux"
 
 function App() {
   const { user } = useUser();
   const {getToken} = useAuth();
+  const dispatch = useDispatch()
 
   useEffect(()=>{
 
+    const fetchData = async ()=>{
+      if(user){
+        const token = await getToken()
+      dispatch(fetchData(token))
+      }
+    }
     if(user){
       getToken().then((token)=>console.log(token))
     }
     else{
       console.log("No user")
     }
-    
+    fetchData();
 
-  }, [user])
+  }, [user , getToken , dispatch])
 
   return (
     <>
