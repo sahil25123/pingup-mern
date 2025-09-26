@@ -12,7 +12,7 @@ function Layout() {
 
     const [sidebarOpen , setSidebarOpen] = useState(false);
     const user  = useSelector((state)=>state.user.value);
-    console.log("Redux user state:", user)
+    // console.log("Redux user state:", user)
 
 
   return  user ? (

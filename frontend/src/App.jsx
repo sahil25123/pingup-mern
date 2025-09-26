@@ -23,9 +23,9 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       if (user) {
-        console.log("Clerk user:", user);
+        // console.log("Clerk user:", user);
         const token = await getToken();
-        console.log("Clerk token:", token);
+        // console.log("Clerk token:", token);
         dispatch(fetchUser(token));
       }
     };
