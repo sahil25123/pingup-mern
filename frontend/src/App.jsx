@@ -20,16 +20,17 @@ function App() {
   const {getToken} = useAuth();
   const dispatch = useDispatch()
 
-  useEffect(()=>{
-
-    const fetchData = async ()=>{
-      if(user){
-        const token = await getToken()
-      dispatch(fetchUser(token))
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user) {
+        console.log("Clerk user:", user);
+        const token = await getToken();
+        console.log("Clerk token:", token);
+        dispatch(fetchUser(token));
       }
-    }
-  fetchData()
-  }, [user , getToken , dispatch])
+    };
+    fetchData();
+  }, [user, getToken, dispatch])
 
   return (
     <>
