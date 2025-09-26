@@ -8,6 +8,10 @@ function PostCard({post}) {
     const [likes, setLikes] = useState(post.likes_count);
     const currentUser = useSelector((state)=>state.user.value)
 
+    const HandleLike=()=>{
+        
+    }
+
   return (
     <div className='bg-white rounded-xl shadow p-4 space-y-4 w-full max-w-2xl'>
         {/* USer Info */}
@@ -35,7 +39,7 @@ function PostCard({post}) {
         <div className=" flex items-center gap-4 text-gray-600 text-sm pt-2 border-t border-gray-300">
 
            <div className='flex items-center gap-1'>
-                <Heart className={`size-4 cursor-pointer && 'text-red-500 fill-red-500'}`}/>
+                <Heart className={`size-4 cursor-pointer ${likes.includes(currentUser._id) && 'text-red-500 fill-red-500'}`} onClick={HandleLike}/>
                 <span>{likes.length}</span>
             </div>
             <div className='flex items-center gap-1'>
