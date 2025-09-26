@@ -13,6 +13,7 @@ import CreatePost from "./pages/CreatePost";
 import ChatBox from "./pages/ChatBox";
 import { useEffect } from "react";
 import {useDispatch} from "react-redux"
+import { fetchUser } from "./features/user/userSlice.js";
 
 function App() {
   const { user } = useUser();
@@ -24,17 +25,10 @@ function App() {
     const fetchData = async ()=>{
       if(user){
         const token = await getToken()
-      dispatch(fetchData(token))
+      dispatch(fetchUser(token))
       }
     }
-    if(user){
-      getToken().then((token)=>console.log(token))
-    }
-    else{
-      console.log("No user")
-    }
-    fetchData();
-
+  fetchData()
   }, [user , getToken , dispatch])
 
   return (

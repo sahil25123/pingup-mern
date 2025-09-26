@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit"
-import api from "../../api/axios"
+import api from "../../api/axios.js"
 import toast from "react-hot-toast"
 
 const initialState = {
@@ -10,6 +10,8 @@ export const fetchUser = createAsyncThunk("user/fetchUser" , async (token)=>{
      const {data} =await api.get("/api/user/data" ,{
         headers :{Authorization : `Bearer ${token}`}
     } )
+
+    console.log(data)
     return data.success ? data.user : null
 
 })
