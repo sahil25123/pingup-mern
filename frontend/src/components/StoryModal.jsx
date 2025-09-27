@@ -1,6 +1,8 @@
+import { useAuth } from '@clerk/clerk-react';
 import { ArrowLeft, Sparkle, TextIcon, Upload } from 'lucide-react'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';
+import api from '../api/axios';
 
 const StoryModal = ({setShowModel , fetchStories}) => {
    const bgColors = [
@@ -32,18 +34,79 @@ const StoryModal = ({setShowModel , fetchStories}) => {
     const [media , setMedia] = useState(null);
     const [preview_url , setPreiview_url] = useState(null);
 
-    const handleMediaUpload = (e) =>{
+    const { getToken } = useAuth();
 
+     const MAX_VIDEO_DURATION = 60; // seconds
+    const MAX_VIDEO_SIZE_MB = 50; // MB 
+
+    const handleMediaUpload = (e) => {
         const file = e.target.files?.[0];
         if(file){
-            setMedia(file);
-            setPreiview_url(URL.createObjectURL(file))
+            if(file.type.startsWith("video")){
+                if(file.size > MAX_VIDEO_SIZE_MB * 1024 * 1024){
+                    toast.error(`Video file size cannot exceed ${MAX_VIDEO_SIZE_MB} MB.`);
+                    setMedia(null);
+                    setPreiview_url(null);
+                    return;
+                }
+                const video = document.createElement('video');
+                video.preload = 'metadata';
+                video.onloadedmetadata = () => {
+                    window.URL.revokeObjectURL(video.src);
+                    if(video.duration > MAX_VIDEO_DURATION){
+                        toast.error("Video duration cannot exceed 1 minute.");
+                        setMedia(null);
+                        setPreiview_url(null);
+                    }else{
+                        setMedia(file);
+                        setPreiview_url(URL.createObjectURL(file));
+                        setText('');
+                        setMode("media")
+                    }
+                }
+                video.src = URL.createObjectURL(file);
+            }else if(file.type.startsWith("image")){
+                setMedia(file);
+                setPreiview_url(URL.createObjectURL(file));
+                setText('');
+                setMode("media")
+            }
         }
     }
 
-    const handleCreateStory =async () =>{
+    
 
+    const handleCreateStory = async () => {
+        const media_type = mode === 'media' ? media?.type.startsWith('image') ? 'image' : "video" : "text";
+
+        if(media_type === "text" && !text){
+            throw new Error('Please enter some text');
+        }
+
+        let formData = new FormData();
+        formData.append('content', text);
+        formData.append('media_type', media_type);
+        formData.append('media', media);
+        formData.append('background_color', bg);
+
+        const token = await getToken();
+        try {
+            const { data } = await api.post('/api/story/create', formData, {
+                headers: {Authorization: `Bearer ${token}`}
+            });
+
+            if(data.success){
+                setShowModel(false);
+                toast.success("Story created successfully");
+                fetchStories()
+            }else{
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }
     }
+
 
 
   return (
