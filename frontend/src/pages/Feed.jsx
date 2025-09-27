@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import { assets, dummyPostsData } from "../assets/assets";
+import { assets} from "../assets/assets";
 import Loading from "../components/Loading";
 import StoryBar from "../components/StoryBar";
 import PostCard from "../components/PostCard";
