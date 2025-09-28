@@ -14,6 +14,7 @@ import ChatBox from "./pages/ChatBox";
 import { useEffect } from "react";
 import {useDispatch} from "react-redux"
 import { fetchUser } from "./features/user/userSlice.js";
+import { fetchConnections } from "./features/connections/connectionSlice.js";
 
 function App() {
   const { user } = useUser();
@@ -27,6 +28,7 @@ function App() {
         const token = await getToken();
         // console.log("Clerk token:", token);
         dispatch(fetchUser(token));
+        dispatch(fetchConnections(token))
       }
     };
     fetchData();
