@@ -221,7 +221,7 @@ export const sendConnectionRequest = async(req , res) =>{
             })
 
               await inngest.send({
-                name: 'app/conection-request',
+                name: 'app/connection-request',
                 data: { connectionId: newConnection._id }
             })
             return res.json({success : true , message :"Connection Request Sent"})
@@ -237,7 +237,7 @@ export const sendConnectionRequest = async(req , res) =>{
 
     }
     catch(e){
-        console.log("Error in the Send Connection Request")
+        console.log("Error in the Send Connection Request", e.message)
         res.status(401).json({success : false , message : e.message})
     }
 
