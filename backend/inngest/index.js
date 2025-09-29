@@ -119,7 +119,6 @@ const sendNewConnectionReq = inngest.createFunction(
 
 )
 
-// delete the story after 24 hours 
 // Inngest function to delete story after 24 hours
 const deleteStory = inngest.createFunction(
     {id: 'story-delete'},
