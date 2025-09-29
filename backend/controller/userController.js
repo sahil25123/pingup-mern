@@ -136,7 +136,7 @@ export const followUser = async (req, res) =>{
         const {userId} = await req.auth();// logggesd in usrer daata
         const {id} =req.body;
 
-        const user = await findById(userId);
+        const user = await User.findById(userId);
 
         if(user.following.includes(id)){
             return res.json({ success: false, message: 'You are already following this user' });
@@ -203,28 +203,39 @@ export const sendConnectionRequest = async(req , res) =>{
         })
 
         if(connectionReq24.length >20){
-            res.json({success : false , message : "You have send more than 20 connections req in last 24  hours"})
+             return res.json({success : false , message : "You have send more than 20 connections req in last 24  hours"})
         }
 
+        // Check if users are already connected
         const connection = await Connection.findOne({
 
             $or  : [
-                {rom_user_id : userId , to_user_id : id},
-                {rom_user_id : id , to_user_id :userId}
-            ]
-
-            
+                {from_user_id : userId , to_user_id : id},
+                {from_user_id : id , to_user_id :userId}
+            ]   
         })
+        console.log(connection);
+
         if(!connection){
              const newConnection = await Connection.create({
                 from_user_id : userId,
                 to_user_id :id
             })
 
-              await inngest.send({
+              console.log("Dispatching event to Inngest:", {
                 name: 'app/connection-request',
-                data: { connectionId: newConnection._id }
-            })
+                data: { connectionId: newConnection._id },
+            });
+
+            const response = await inngest.send({
+                name: 'app/connection-request',
+                data: { connectionId: newConnection._id },
+            });
+
+            console.log("Before resposne")
+            console.log("Inngest response:", response);
+            console.log("After Response")
+
             return res.json({success : true , message :"Connection Request Sent"})
         }
 
