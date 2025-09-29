@@ -26,10 +26,7 @@ export const updateUser = createAsyncThunk("user/update", async ({userData , tok
     else {
         toast.error(data.message)
         return null
-
     }
-
-
 })
 
 const userSlice = createSlice({

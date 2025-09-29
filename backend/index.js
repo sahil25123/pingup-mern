@@ -10,8 +10,6 @@ import postRouter from "./routes/PostRoutes.js";
 import StoryRouter from "./routes/StoryRoutes.js";
 import messageRouter from "./routes/MessageRoutes.js";
 
-
-
 dotenv.config()
 
 const PORT=9000;
