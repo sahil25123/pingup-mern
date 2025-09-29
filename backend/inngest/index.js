@@ -115,8 +115,6 @@ const sendNewConnectionReq = inngest.createFunction(
             return { message: "Reminder sent."}
         })
     }
-
-
 )
 
 // Inngest function to delete story after 24 hours
