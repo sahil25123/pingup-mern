@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/Login";
 import Feed from "./pages/Feed";
@@ -7,19 +7,25 @@ import Discover from "./pages/Discover";
 import Connections from "./pages/Connections";
 import { useUser  , useAuth} from "@clerk/clerk-react";
 import Layout from "./pages/Layout";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import Profile from "./pages/Profile";
 import CreatePost from "./pages/CreatePost";
 import ChatBox from "./pages/ChatBox";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {useDispatch} from "react-redux"
 import { fetchUser } from "./features/user/userSlice.js";
 import { fetchConnections } from "./features/connections/connectionSlice.js";
+import { addMessage } from "./features/messges/messageSlice.js";
+import Notification from "./components/Notification.jsx";
 
 function App() {
   const { user } = useUser();
   const {getToken} = useAuth();
   const dispatch = useDispatch()
+
+  const {pathname} = useLocation();
+  const pathnameRef = useRef(pathname);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +40,31 @@ function App() {
     fetchData();
   }, [user, getToken, dispatch])
 
+  useEffect(()=>{
+    pathnameRef.current = pathname;
+  },[pathname]);
+
+  useEffect(()=>{
+    if(user){
+      const eventSource = new EventSource(import.meta.env.VITE_BASE_URL + '/api/message/' + user.id);
+
+      eventSource.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+
+        if(pathnameRef.current === ('/messages/' + message.from_user_id._id)){
+          dispatch(addMessage(message));
+        }else{
+          toast.custom((t)=>{
+            <Notification t={t} message={message}/>
+          }, {position: "bottom-right"})
+        }
+      }
+      return ()=>{
+        eventSource.close();
+      }
+    }
+  },[user, dispatch])
+
   return (
     <>
       <Toaster />
@@ -45,6 +76,7 @@ function App() {
           <Route path='connections' element={<Connections />}/>
           <Route path='discover' element={<Discover />}/>
           <Route path='profile' element={<Profile />}/>
+          <Route path='profile/:profileId' element={<Profile />}/>
           <Route path='create-post' element={<CreatePost />}/>
           {/* <Route path="" */}
         </Route>
