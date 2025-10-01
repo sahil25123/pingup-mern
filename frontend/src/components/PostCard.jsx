@@ -40,7 +40,13 @@ function PostCard({post}) {
     <div className='bg-white rounded-xl shadow p-4 space-y-4 w-full max-w-2xl'>
         {/* USer Info */}
         <div className='inline-flex items-center gap-3 cursor-pointer'>
-            <img src={post.user.profile_picture} className='rounded-full shadow w-10 h-10'/>
+            {post.user.profile_picture ? (
+                <img src={post.user.profile_picture} className='rounded-full shadow w-10 h-10'/>
+            ) : (
+                <div className='rounded-full shadow w-10 h-10 bg-gray-200 flex items-center justify-center'>
+                    <span className='text-gray-500 text-sm font-medium'>{post.user.full_name?.charAt(0) || 'U'}</span>
+                </div>
+            )}
             <div>
                 <div className='flex items-center space-x-1'>
                     <span>{post.user.full_name}</span>

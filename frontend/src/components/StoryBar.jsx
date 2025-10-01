@@ -53,7 +53,13 @@ const StoriesBar = () => {
             {
                 stories.map((story, index) => (
                     <div key={index} onClick={() => setViewStory(story)} className={`relative rounded-lg shadow min-w-30 max-w-30 cursor-pointer hover:shadow-lg transition-all duration-200 bg-gradient-to-b from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 active:scale-95`}>
-                        <img src={story.user.profile_picture} className='aspect-square object-cover absolute size-8 top-3 left-3 z-10 rounded-full ring ring-gray-100 shadow' alt="" />
+                        {story.user.profile_picture ? (
+                            <img src={story.user.profile_picture} className='aspect-square object-cover absolute size-8 top-3 left-3 z-10 rounded-full ring ring-gray-100 shadow' alt="" />
+                        ) : (
+                            <div className='aspect-square absolute size-8 top-3 left-3 z-10 rounded-full ring ring-gray-100 shadow bg-gray-200 flex items-center justify-center'>
+                                <span className='text-gray-500 text-xs font-medium'>{story.user.full_name?.charAt(0) || 'U'}</span>
+                            </div>
+                        )}
                         <p className=' absolute top-18 left-3 text-white/60 text-sm truncate max-w-24'>{story.content}</p>
                         <p className='text-white absolute bottom-1 right-2 z-10 text-xs'>{moment(story.createdAt).fromNow()}</p>
                         {
@@ -61,9 +67,9 @@ const StoriesBar = () => {
                                 <div className=' absolute inset-0 z-1 rounded-lg bg-black overflow-hidden'>
                                     {
                                         story.media_type === 'image' ? 
-                                            <img src={story.media_url} className='h-full w-full object-cover hover:scale-110 transition duration-500 opacity-70 hover:opacity-80' alt="" /> 
+                                            (story.media_url ? <img src={story.media_url} className='h-full w-full object-cover hover:scale-110 transition duration-500 opacity-70 hover:opacity-80' alt="" /> : null)
                                         :
-                                            <video src={story.media_url} className='h-full w-full object-cover hover:scale-110 transition duration-500 opacity-70 hover:opacity-80'/>
+                                            (story.media_url ? <video src={story.media_url} className='h-full w-full object-cover hover:scale-110 transition duration-500 opacity-70 hover:opacity-80'/> : null)
                                     }
                                 </div>
                             )

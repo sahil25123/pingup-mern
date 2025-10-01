@@ -22,9 +22,15 @@ function Messages() {
          {/* conected user  */}
 
          <div className='flex flex-col gap-3'>
-          {connections.map((user)=>(
+          {connections && connections.map((user)=>(
             <div key={user._id} className='max-w-xl flex flex-wrap gap-5 p-6 bg-white shadow rounded-md'>
-              <img   className='aspect-square object-cover rounded-full size-12 mx-auto' alt=""  src={user.profile_picture}/>
+              {user.profile_picture ? (
+                <img className='aspect-square object-cover rounded-full size-12 mx-auto' alt="" src={user.profile_picture}/>
+              ) : (
+                <div className='aspect-square rounded-full size-12 mx-auto bg-gray-200 flex items-center justify-center'>
+                  <span className='text-gray-500 text-sm font-medium'>{user.full_name?.charAt(0) || 'U'}</span>
+                </div>
+              )}
               <div className='flex-1'>
                 <p className='font-medium text-slate-700'>{user.full_name}</p>
                 <p className='text-slate-500'>@{user.username}</p>
