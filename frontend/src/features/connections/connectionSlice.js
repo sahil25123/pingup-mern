@@ -12,7 +12,7 @@ export const fetchConnections = createAsyncThunk('connections/fetchConnections',
     const { data } = await api.get('/api/user/connections', {
         headers: { Authorization: `Bearer ${token}` },
     });
-    console.log('API response for connections:', data);
+    // console.log('API response for connections:', data);
     return data.success ? data : null;
 })
 
