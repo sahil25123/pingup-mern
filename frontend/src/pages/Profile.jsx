@@ -13,39 +13,36 @@ import { useSelector } from 'react-redux';
 function Profile() {
   const currentUser = useSelector((state) => state.user.value);
   const { getToken } = useAuth();
-  const { profileId } = useParams(); // This comes from URL params
+  const { profileId } = useParams();
   
   const [user, setUser] = useState(null);
   const [posts, setPosts] = useState([]);
   const [activeTab, setActiveTab] = useState("posts");
   const [showEdit, setShowEdit] = useState(false);
-  const [loading, setLoading] = useState(true); // ✅ Added loading state
+  const [loading, setLoading] = useState(true);
 
-  // ✅ Fixed: Define fetchUser inside useEffect or use useCallback
   useEffect(() => {
     const fetchUser = async () => {
       try {
         setLoading(true);
         const token = await getToken();
         
-        // ✅ Use profileId from params, or currentUser._id if viewing own profile
+        // Use profileId from params, or currentUser._id if viewing own profile
         const idToFetch = profileId || currentUser?._id;
         
         if (!idToFetch) {
-          console.log("No user ID available");
+          setLoading(false);
           return;
         }
 
-        console.log("Fetching profile for ID:", idToFetch);
-
         const { data } = await api.post(`/api/user/profile`, 
-          { profileId: idToFetch }, // ✅ Pass the correct ID
+          { profileId: idToFetch },
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
         if (data.success) {
           setUser(data.profile);
-          setPosts(data.posts);
+          setPosts(data.posts || []);
         } else {
           toast.error(data.message);
         }
@@ -57,18 +54,15 @@ function Profile() {
       }
     };
 
-    // ✅ Only fetch when we have currentUser data
     if (currentUser) {
       fetchUser();
     }
-  }, [profileId, currentUser?._id, getToken]); // ✅ Proper dependencies
+  }, [profileId, currentUser?._id, getToken]);
 
-  // ✅ Show loading state
   if (loading) {
     return <Loading />;
   }
 
-  // ✅ Show error state if no user
   if (!user) {
     return (
       <div className='h-full flex items-center justify-center bg-gray-50'>
@@ -84,7 +78,8 @@ function Profile() {
       <div className='max-w-3xl mx-auto'>
         {/* Profile card */}
         <div className='bg-white rounded-2xl shadow overflow-hidden'>
-          <div className='h-40 md:h-56 bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200'>
+          {/* Cover Photo */}
+          <div className='h-40 md:h-56 bg-gradient-to-r from-indigo-200 via-purple-200 to-pink-200 relative'>
             {user.cover_photo && (
               <img 
                 src={user.cover_photo} 
@@ -93,24 +88,26 @@ function Profile() {
               />
             )}
           </div>
+
           {/* User Info */}
           <UserProfileInfo 
             user={user} 
             posts={posts} 
             profileId={profileId} 
-            setShowEdit={setShowEdit} 
+            setShowEdit={setShowEdit}
+            currentUser={currentUser}
           />
         </div>
 
         {/* Tabs */}
         <div className='mt-6'>
-          <div className='bg-white rounded-xl mx-auto max-w-md flex'>
+          <div className='bg-white rounded-xl mx-auto max-w-md flex overflow-hidden shadow-sm'>
             {["posts", "media", "likes"].map((tab) => (
               <button
-                className={`flex-1 px-4 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+                className={`flex-1 px-4 py-3 text-sm font-medium transition-all duration-200 ${
                   activeTab === tab 
-                    ? "bg-indigo-600 text-white" 
-                    : "text-gray-600 hover:text-gray-900"
+                    ? "bg-gradient-to-r from-indigo-600 to-purple-600 text-white" 
+                    : "text-gray-600 hover:bg-gray-50"
                 }`}
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -128,7 +125,7 @@ function Profile() {
                   <PostCard key={post._id} post={post} />
                 ))
               ) : (
-                <div className='bg-white rounded-xl p-8 text-center'>
+                <div className='bg-white rounded-xl p-8 text-center shadow-sm'>
                   <p className='text-gray-500'>No posts yet</p>
                 </div>
               )}
@@ -149,14 +146,14 @@ function Profile() {
                             to={image} 
                             key={index} 
                             target='_blank'
-                            className='relative group aspect-square overflow-hidden rounded-lg'
+                            className='relative group aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-shadow'
                           >
                             <img 
                               src={image} 
-                              className='w-full h-full object-cover transition-transform group-hover:scale-110' 
+                              className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-110' 
                               alt='' 
                             />
-                            <div className='absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors'>
+                            <div className='absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300'>
                               <p className='absolute bottom-2 right-2 text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity'>
                                 Posted {moment(post.createdAt).fromNow()}
                               </p>
@@ -167,7 +164,7 @@ function Profile() {
                     ))}
                 </div>
               ) : (
-                <div className='bg-white rounded-xl p-8 text-center'>
+                <div className='bg-white rounded-xl p-8 text-center shadow-sm'>
                   <p className='text-gray-500'>No media posts yet</p>
                 </div>
               )}
@@ -184,7 +181,7 @@ function Profile() {
                     <PostCard key={post._id} post={post} />
                   ))
               ) : (
-                <div className='bg-white rounded-xl p-8 text-center'>
+                <div className='bg-white rounded-xl p-8 text-center shadow-sm'>
                   <p className='text-gray-500'>No liked posts yet</p>
                 </div>
               )}
@@ -194,7 +191,7 @@ function Profile() {
       </div>
 
       {/* Edit Profile Modal */}
-      {showEdit && <ProfileModal setShowEdit={setShowEdit} />}
+      {showEdit && <ProfileModal setShowEdit={setShowEdit} user={user} />}
     </div>
   );
 }

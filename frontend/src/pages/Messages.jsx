@@ -7,9 +7,9 @@ function Messages() {
   const navigate = useNavigate();
   const {connections} = useSelector((state)=>state.connections)
 
-  console.log("Full Redux state:", useSelector(state => state));
-  console.log("Connections state:", useSelector(state => state.connections));
-  console.log("Connections array:", connections);
+  // console.log("Full Redux state:", useSelector(state => state));
+  // console.log("Connections state:", useSelector(state => state.connections));
+  // console.log("Connections array:", connections);
 
 
 
