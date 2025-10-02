@@ -7,6 +7,7 @@ import RecentMessages from "../components/RecentMessages";
 import { useAuth } from "@clerk/clerk-react";
 import api from "../api/axios";
 import toast from "react-hot-toast";
+import { Zap } from "lucide-react";
 
 function Feed() {
   const {getToken}  = useAuth()
