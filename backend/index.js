@@ -19,7 +19,17 @@ const app= express();
 await connect(); //Database Connection config
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:5173', // Your local development
+        'http://localhost:3000', // Another common local port
+        'https://your-frontend-domain.vercel.app' // Your deployed frontend
+    ],
+    credentials: true, // If you're using cookies/auth headers
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
+
 app.use(clerkMiddleware());
 
 
