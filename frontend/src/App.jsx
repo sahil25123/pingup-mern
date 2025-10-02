@@ -32,7 +32,7 @@ function App() {
       if (user) {
         // console.log("Clerk user:", user);
         const token = await getToken();
-        console.log("Clerk token:", token);
+        //console.log("Clerk token:", token);
         dispatch(fetchUser(token));
         dispatch(fetchConnections(token))
       }

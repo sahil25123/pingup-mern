@@ -41,7 +41,7 @@ function UserProfileInfo({user, posts, profileId, setShowEdit}) {
               <button 
                 onClick={() => {
                   setShowEdit(true);
-                  console.log("Edit button clicked");
+                  //console.log("Edit button clicked");
                 }} 
                 className='flex items-center gap-2 border border-gray-300 hover:bg-gray-50 px-4 py-2 rounded-lg font-medium transition-colors'
               >

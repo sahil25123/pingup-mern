@@ -10,6 +10,7 @@ export const addUserStory = async (req, res) => {
         const {userId} = req.auth();
         const {content, media_type, background_color} = req.body; 
 
+        // Validation
         if(!media_type || !['text', 'image', 'video'].includes(media_type)) {
             return res.status(400).json({success: false, message: "Invalid media type"});
         }
@@ -21,8 +22,8 @@ export const addUserStory = async (req, res) => {
         const media = req.file;
         let media_url = "";
          
+        // Handle media upload for image/video stories
         if(media_type === "image" || media_type === "video") {
-            // ✅ Check if media file exists
             if(!media) {
                 return res.status(400).json({success: false, message: "Media file is required"});
             }
@@ -35,31 +36,27 @@ export const addUserStory = async (req, res) => {
                 });
                 media_url = response.url;
 
-                //Clean up temporary file
+                // Clean up temporary file
                 fs.unlinkSync(media.path);
             } catch (uploadError) {
-                // ✅ Clean up file even if upload fails
+                // Clean up file even if upload fails
                 if(media && media.path && fs.existsSync(media.path)) {
                     fs.unlinkSync(media.path);
                 }
-                throw new Error(`Failed to upload media: ${uploadError.message}`);
+                throw new Error(`Failed to upload media: ${uploadError.message}`);   
             }
         }
 
-        // Create story outside the if block (for all types)
+        // Create story - MongoDB will automatically delete it after 24 hours
         const story = await Story.create({
             user: userId, 
             content, 
             media_url, 
             media_type,
-            background_color, 
+            background_color
         });
 
-        // Schedule story deletion after 24 hours
-        //   await inngest.send({
-        //     name: 'app/story.delete',
-        //     data: { storyId: story._id }
-        // });
+       // console.log('Story created:', story._id, 'Will auto-delete in 24 hours');
         
         return res.json({success: true, story}); 
 
@@ -82,11 +79,18 @@ export const getStories = async (req, res) => {
         // User connections and followings
         const userIds = [userId, ...user.connections, ...user.following];
 
+        // Get stories - MongoDB automatically filters expired ones
         const stories = await Story.find({
             user: {$in: userIds}
-        }).populate('user').sort({ createdAt: -1 });
+        })
+        .populate('user')
+        .sort({ createdAt: -1 });
 
-        return res.json({ success: true, stories }); 
+        return res.json({ 
+            success: true, 
+            stories,
+            count: stories.length
+        }); 
 
     } catch (error) {
         console.log("Error in getStories:", error);

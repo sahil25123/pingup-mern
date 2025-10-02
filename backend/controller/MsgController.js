@@ -9,7 +9,7 @@ const connections = {};
 // controller function for the SSE endpoint
 export const sseController = (req, res) => {
     const { userId } = req.params;
-    console.log('New client connected : ', userId);
+    //console.log('New client connected : ', userId);
 
     // Set SSE Header
     res.setHeader('Content-Type', 'text/event-stream');
@@ -27,7 +27,7 @@ export const sseController = (req, res) => {
     req.on('close', () => {
         // Remove the client's response object from the connections array
         delete connections[userId];
-        console.log('Client disconnected');
+        //console.log('Client disconnected');
     })
 }
 

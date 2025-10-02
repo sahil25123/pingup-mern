@@ -220,11 +220,6 @@ export const sendConnectionRequest = async(req , res) =>{
              const newConnection = await Connection.create({
                 from_user_id : userId,
                 to_user_id :id
-            })
-
-              console.log("Dispatching event to Inngest:", {
-                name: 'app/connection-request',
-                data: { connectionId: newConnection._id },
             });
 
             const response = await inngest.send({
@@ -232,9 +227,9 @@ export const sendConnectionRequest = async(req , res) =>{
                 data: { connectionId: newConnection._id },
             });
 
-            console.log("Before resposne")
-            console.log("Inngest response:", response);
-            console.log("After Response")
+            // console.log("Before resposne")
+            // console.log("Inngest response:", response);
+            // console.log("After Response")
 
             return res.json({success : true , message :"Connection Request Sent"})
         }
