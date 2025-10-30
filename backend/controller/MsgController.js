@@ -20,7 +20,7 @@ export const sseController = (req, res) => {
     // Add the client's response object to the connections object
     connections[userId] = res;
 
-    // Send an initial event to the client
+    // Send an initial event to the client  this is explaination for the above 
     res.write('log: Connected to SSE stream\n\n');
 
     // Handle client disconnection
